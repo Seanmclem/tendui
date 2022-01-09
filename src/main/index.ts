@@ -4,6 +4,8 @@ import contextMenu from 'electron-context-menu'
 import windowStateKeeper from 'electron-window-state'
 import { getTwConfig, getTwConfigPath } from '@twstyled/util'
 
+const pty = require('node-pty')
+
 const resolvedTailwindConfig = getTwConfig(getTwConfigPath())
 
 const isDevelopment = !app.isPackaged
