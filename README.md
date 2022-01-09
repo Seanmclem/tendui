@@ -7,6 +7,8 @@ made with electron vite react starter: https://github.com/maxstue/vite-reactts-e
 
 `yarn`
 
+---
+
 ### Before first run
 
 Might need to run 
@@ -14,6 +16,8 @@ Might need to run
 `yarn rebuild`
 
 Due to node-pty
+
+---
 
 ## Development
 
