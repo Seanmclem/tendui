@@ -26,6 +26,14 @@ const containerMotion = {
   }
 }
 
+const runCommand = (command: string, enter = true) => {
+  if (enter) {
+    ipcRenderer.send('terminal.keystroke', `${command}${`\n`}`)
+  } else {
+    ipcRenderer.send('terminal.keystroke', `${command}`)
+  }
+}
+
 function App() {
   const [isMounted, setIsMounted] = useState(false)
 
@@ -52,6 +60,35 @@ function App() {
 
   return (
     <div tw="h-screen w-screen flex flex-col pt-12">
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        <button onClick={() => runCommand('clear')}>clear</button>
+        <button onClick={() => runCommand('ls')}>Do LS</button>
+
+        <button onClick={() => runCommand('pwd')}>PWD</button>
+
+        <button onClick={() => runCommand('nano ~/.zshrc')}>Edit zsh</button>
+        <button onClick={() => runCommand('\b', false)}>backspace</button>
+
+        <button onClick={() => runCommand('\x1b\x5b\x41', false)}>
+          Up Arrow
+        </button>
+        <button onClick={() => runCommand('\x1b\x5b\x44', false)}>
+          Left Arrow
+        </button>
+        <button onClick={() => runCommand('\x1b\x5b\x43', false)}>
+          Right Arrow
+        </button>
+
+        <button onClick={() => runCommand('\x1b\x5b\x42', false)}>
+          Down Arrow
+        </button>
+
+        <button onClick={() => runCommand('\x20', false)}>space</button>
+
+        <button onClick={() => runCommand('\r', false)}>Enter</button>
+
+        <button onClick={() => runCommand('\x1b', false)}>ESC</button>
+      </div>
       <div>Test terminal</div>
       <div id="terminal"></div>
     </div>

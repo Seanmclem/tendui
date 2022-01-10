@@ -76,6 +76,7 @@ function createWindow() {
     console.log('Data sent')
   })
   ipcMain.on('terminal.keystroke', (event, key) => {
+    console.log({ key })
     ptyProcess.write(key)
   })
 
