@@ -6,7 +6,20 @@ import { useEffect, useState } from 'react'
 
 import 'xterm/css/xterm.css'
 
-const { ipcRenderer } = window.require('electron') // red underline, ok for now - Issue: https://github.com/maxstue/vite-reactts-electron-starter/issues/15
+import styled from 'styled-components'
+import TopBar from './components/top-bar'
+// red underline, ok for now - Issue: https://github.com/maxstue/vite-reactts-electron-starter/issues/15
+const { ipcRenderer } = window.require('electron')
+
+const ButtonContainer = styled.div`
+  background-color: gray;
+  display: flex;
+  flex-wrap: wrap;
+  button {
+    background-color: hotpink;
+    margin: 5px;
+  }
+`
 
 const term = new Terminal()
 
@@ -60,7 +73,8 @@ function App() {
 
   return (
     <div tw="h-screen w-screen flex flex-col pt-12">
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      <TopBar />
+      <ButtonContainer style={{}}>
         <button onClick={() => runCommand('clear')}>clear</button>
         <button onClick={() => runCommand('ls')}>Do LS</button>
 
@@ -88,7 +102,9 @@ function App() {
         <button onClick={() => runCommand('\r', false)}>Enter</button>
 
         <button onClick={() => runCommand('\x1b', false)}>ESC</button>
-      </div>
+
+        <button onClick={() => runCommand('\x18', false)}>command x?</button>
+      </ButtonContainer>
       <div>Test terminal</div>
       <div id="terminal"></div>
     </div>
