@@ -1,4 +1,4 @@
-### Super Terminal
+### Tendui
 
 made with electron vite react starter: https://github.com/maxstue/vite-reactts-electron-starter
 
