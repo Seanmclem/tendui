@@ -27,14 +27,30 @@ export const VitePage: React.FC<VitePageProps> = () => {
         term.open(document.getElementById('terminal'))
 
         ipcRenderer.on('terminal.incomingData', (event, data: string) => {
+          console.log('incomingData', { event, data })
+
+          // ^ First runs, ]697;PreExec >... PreExec
+          // then a command that barely includes your command reflected at the end, like ls ... > ]2;ls -G]1;ls
+          // then, encoded output as data ...> [1m[36mApplications[m[m [1m[36mDocuments[m[m    [1m[36mLibrary[m[m
+          // all 3, run sequentially, in midst of events
+
+          // ANSI shell color codes. like...>  ?[1m?[36m
+          // https://stackoverflow.com/a/14636812/3705183
+          // ^^
+          // !!! run> echo "\x1b[0m"      <<<<<<<
+          //  ^^^ "reset all attributes"
+          // ^^^ http://jafrog.com/2013/11/23/colors-in-terminal.html
+
           term.write(data)
         })
 
         term.onData((e) => {
-          console.log('hit dat?')
+          console.log('event onData', e)
           // console.log({ ipcRenderer })
           ipcRenderer.send('terminal.keystroke', e)
         })
+
+        runCommand('export TERM=', ipcRenderer, true)
       }
     }
   }, [])
