@@ -37,9 +37,8 @@ export const VitePage: React.FC<VitePageProps> = () => {
           // ANSI shell color codes. like...>  ?[1m?[36m
           // https://stackoverflow.com/a/14636812/3705183
           // ^^
-          // !!! run> echo "\x1b[0m"      <<<<<<<
-          //  ^^^ "reset all attributes"
-          // ^^^ http://jafrog.com/2013/11/23/colors-in-terminal.html
+          // !!! export TERM= <<< resets color theme
+          // Color info:  http://jafrog.com/2013/11/23/colors-in-terminal.html
 
           term.write(data)
         })
