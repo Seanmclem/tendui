@@ -1,22 +1,63 @@
 const { ipcRenderer } = window.require('electron')
 import { Terminal } from 'xterm'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import 'xterm/css/xterm.css'
 import styled from 'styled-components'
-import { runCommand } from '../utils/commander-utils'
+import { removeColor, runCommand } from '../utils/commander-utils'
 import { createCommand } from '../commanders/vite-commander'
 
 //
 
 // move out ^
 
-const term = new Terminal() // might need to handle multiple instances per component, one day
+const term = new Terminal({
+  // theme: {
+  //   background: '#e9ae0e'
+  // }
+}) // might need to handle multiple instances per component, one day
 
 interface VitePageProps {}
 
+const isLastCommand = (output?: string) => {
+  const firstCharacter = output?.charAt(0)
+  let result: string | false = false
+
+  switch (firstCharacter) {
+    case '?':
+      result = 'QUESTION'
+      break
+    // case '>':
+    //   result = 'CHOICES'
+    //   break
+  }
+  console.log(firstCharacter)
+  if (output && result === 'QUESTION') {
+    const decodedOutput = encodeURI(output)
+    const returnChar = '%0A'
+    const weirdArrow = '%E2%9D%AF'
+    console.log('decodedOutput', decodedOutput)
+    console.log(`${returnChar}${weirdArrow}`)
+    const containsChoices = decodedOutput.includes(`${returnChar}${weirdArrow}`)
+    console.log(containsChoices)
+
+    if (containsChoices) {
+      result = 'CHOICES'
+    }
+  }
+  // console.log(firstCharacter)
+  return result
+}
+
 export const VitePage: React.FC<VitePageProps> = () => {
+  const lastCommandRef = useRef<string>()
+  const [lastOutput, setLastOutput] = useState<string>()
+
   const [isMounted, setIsMounted] = useState(false)
   const [showTerminal, setShowTerminal] = useState(true)
+
+  // useEffect(() => {
+  //   isLastCommand(lastOutput)
+  // }, [lastOutput])
 
   useEffect(() => {
     // console.log({ ipcRenderer })
@@ -27,21 +68,20 @@ export const VitePage: React.FC<VitePageProps> = () => {
         term.open(document.getElementById('terminal'))
 
         ipcRenderer.on('terminal.incomingData', (event, data: string) => {
-          console.log('incomingData', { event, data })
+          //console.log('incomingData', removeColor(data))
 
-          // ^ First runs, ]697;PreExec >... PreExec
-          // then a command that barely includes your command reflected at the end, like ls ... > ]2;ls -G]1;ls
-          // then, encoded output as data ...> [1m[36mApplications[m[m [1m[36mDocuments[m[m    [1m[36mLibrary[m[m
-          // all 3, run sequentially, in midst of events
-
-          // ANSI shell color codes. like...>  ?[1m?[36m
-          // https://stackoverflow.com/a/14636812/3705183
-          // ^^
-          // !!! export TERM= <<< resets color theme
-          // Color info:  http://jafrog.com/2013/11/23/colors-in-terminal.html
+          setLastOutput(removeColor(data))
+          if (removeColor(data).includes('❯\n')) {
+            console.log('HERE')
+          }
 
           term.write(data)
         })
+
+        // PreExec is output right before command is
+
+        // "Select a framework:" throws the flag for a QUESTION
+        // what logs >
 
         term.onData((e) => {
           console.log('event onData', e)
@@ -105,6 +145,9 @@ export const VitePage: React.FC<VitePageProps> = () => {
           Toggle Termnal
         </button>
       </ButtonContainer>
+      <h3 className="h-3 bg-white">{`Last Promt: ${
+        isLastCommand(lastOutput) || 'none'
+      }`}</h3>
       <div
         id="terminal"
         style={{
