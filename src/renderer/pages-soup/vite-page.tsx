@@ -60,36 +60,30 @@ export const VitePage: React.FC<VitePageProps> = () => {
   // }, [lastOutput])
 
   useEffect(() => {
-    // console.log({ ipcRenderer })
-
     if (!isMounted) {
+      // needed?
       setIsMounted(true)
-      if (document.getElementById('terminal')) {
-        term.open(document.getElementById('terminal'))
+      const terminalDOM = document.getElementById('terminal')
+      if (terminalDOM) {
+        term.open(terminalDOM)
 
         ipcRenderer.on('terminal.incomingData', (event, data: string) => {
           //console.log('incomingData', removeColor(data))
 
           setLastOutput(removeColor(data))
-          if (removeColor(data).includes('❯\n')) {
-            console.log('HERE')
-          }
 
           term.write(data)
         })
 
         // PreExec is output right before command is
 
-        // "Select a framework:" throws the flag for a QUESTION
-        // what logs >
-
         term.onData((e) => {
           console.log('event onData', e)
-          // console.log({ ipcRenderer })
           ipcRenderer.send('terminal.keystroke', e)
         })
 
         runCommand('export TERM=', ipcRenderer, true)
+        // needed?
       }
     }
   }, [])
