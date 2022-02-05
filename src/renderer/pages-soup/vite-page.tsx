@@ -5,6 +5,7 @@ import 'xterm/css/xterm.css'
 import styled from 'styled-components'
 import { removeColor, runCommand } from '../utils/commander-utils'
 import { createCommand } from '../commanders/vite-commander'
+import { PageTypePicker } from '../components/PageTypePicker'
 
 //
 
@@ -18,7 +19,7 @@ const term = new Terminal({
 
 interface VitePageProps {}
 
-const isLastCommand = (output?: string) => {
+const manageOutput = (output?: string) => {
   const firstCharacter = output?.charAt(0)
   let result: string | false = false
 
@@ -35,8 +36,8 @@ const isLastCommand = (output?: string) => {
     const decodedOutput = encodeURI(output)
     const returnChar = '%0A'
     const weirdArrow = '%E2%9D%AF'
-    console.log('decodedOutput', decodedOutput)
-    console.log(`${returnChar}${weirdArrow}`)
+    // console.log('decodedOutput', decodedOutput)
+    // console.log(`${returnChar}${weirdArrow}`)
     const containsChoices = decodedOutput.includes(`${returnChar}${weirdArrow}`)
     console.log(containsChoices)
 
@@ -45,6 +46,16 @@ const isLastCommand = (output?: string) => {
     }
   }
   // console.log(firstCharacter)
+
+  const currentDialog = {
+    dialogType: 'QUESTION', // loading indicators, etc
+    currentPromptType: 'CHOICES',
+    data: {
+      dialogText: "what's the choice",
+      currentPromptText: ' 3 choices'
+    }
+  }
+
   return result
 }
 
@@ -88,9 +99,14 @@ export const VitePage: React.FC<VitePageProps> = () => {
     }
   }, [])
 
+  const [selectedPageType, setSelectedPageType] = useState('')
+
   return (
     <Container>
       <Heading>Vite Page</Heading>
+
+      <PageTypePicker setSelectedValue={setSelectedPageType} />
+
       <ButtonContainer style={{}}>
         <button onClick={() => runCommand('clear', ipcRenderer, true)}>
           clear
@@ -140,7 +156,7 @@ export const VitePage: React.FC<VitePageProps> = () => {
         </button>
       </ButtonContainer>
       <h3 className="h-3 bg-white">{`Last Promt: ${
-        isLastCommand(lastOutput) || 'none'
+        manageOutput(lastOutput) || 'none'
       }`}</h3>
       <div
         id="terminal"
