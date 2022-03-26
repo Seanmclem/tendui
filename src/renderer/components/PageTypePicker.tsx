@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import SegmentedControl from './SegmentedControl'
+import SegmentedControl from './SegmentedControl/SegmentedControl'
 
 interface PageTypePickerProps {
   setSelectedValue: (val: any) => void

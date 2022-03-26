@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import './styles.css'
+import styled from 'styled-components'
 
 /*
  * Read the blog post here:
@@ -22,6 +23,9 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
   const [activeIndex, setActiveIndex] = useState(defaultIndex)
   const componentReady = useRef<any>()
 
+  const [offsetWidthNumber, setOffsetWidthNumber] = useState('auto')
+  const [offsetLeftNumber, setOffsetLeftNumber] = useState(`translateX(0px)`)
+
   // Determine when the component is "ready"
   useEffect(() => {
     componentReady.current = true
@@ -30,10 +34,9 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
   useEffect(() => {
     const activeSegmentRef = segments[activeIndex].ref
     const { offsetWidth, offsetLeft } = activeSegmentRef.current
-    const { style } = document.documentElement
 
-    style.setProperty('--highlight-width', `${offsetWidth}px`)
-    style.setProperty('--highlight-x-pos', `${offsetLeft}px`)
+    setOffsetWidthNumber(offsetWidth)
+    setOffsetLeftNumber(`translateX(${offsetLeft}px)`)
   }, [activeIndex, callback, segments])
 
   const onInputChange = (value: string, index: number) => {
@@ -44,6 +47,8 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
   return (
     <div className="controls-container">
       <div className={`controls ${componentReady.current ? 'ready' : 'idle'}`}>
+        <Controls123 widthOff={offsetWidthNumber} pos={offsetLeftNumber} />
+
         {segments?.map((item, i) => (
           <div
             key={item.value}
@@ -67,3 +72,19 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
 }
 
 export default SegmentedControl
+
+const Controls123 = styled.div<{ widthOff: string; pos: string }>`
+  width: ${(props) => `${props.widthOff}px`};
+  transform: ${(props: any) => props.pos};
+
+  content: '';
+  background: #5465ff;
+  border-radius: 8px;
+
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  z-index: 0;
+  transition: transform 0.3s ease, width 0.3s ease;
+`
