@@ -17,7 +17,9 @@ const term = new Terminal({
   // }
 }) // might need to handle multiple instances per component, one day
 
-interface VitePageProps {}
+interface VitePageProps {
+  style: any
+}
 
 const manageOutput = (output?: string) => {
   const firstCharacter = output?.charAt(0)
@@ -59,7 +61,7 @@ const manageOutput = (output?: string) => {
   return result
 }
 
-export const VitePage: React.FC<VitePageProps> = () => {
+export const VitePage: React.FC<VitePageProps> = ({ style }) => {
   const lastCommandRef = useRef<string>()
   const [lastOutput, setLastOutput] = useState<string>()
 
@@ -107,7 +109,7 @@ export const VitePage: React.FC<VitePageProps> = () => {
   const [selectedPageType, setSelectedPageType] = useState('')
 
   return (
-    <Container>
+    <Container style={style}>
       <Heading>Vite Page</Heading>
 
       {/* <PageTypePicker setSelectedValue={setSelectedPageType} /> */}
