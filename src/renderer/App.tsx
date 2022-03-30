@@ -5,6 +5,7 @@ import 'xterm/css/xterm.css'
 
 import TopBar from './components/top-bar'
 import { VitePage } from './pages-soup/vite-page'
+import { MainUI } from './areas/main-gui/MainUI'
 // red underline, ok for now - Issue: https://github.com/maxstue/vite-reactts-electron-starter/issues/15
 
 // const containerMotion = {
@@ -27,7 +28,9 @@ function App() {
   return (
     <div tw="h-screen w-screen flex flex-col pt-12">
       <TopBar />
-      <VitePage />
+      {/* here store like a container for the tap-left-panel, and main UI... copy r3f-stair thing? */}
+      {/* <VitePage /> */}
+      <MainUI />
     </div>
   )
 }
