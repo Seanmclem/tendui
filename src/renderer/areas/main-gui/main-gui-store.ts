@@ -8,7 +8,7 @@ interface ISet {
   setSelectedMenuOption: (update: string) => void
 }
 
-export const useTemplateStore = create<ISet>((set: SetState<ISet>) => ({
+export const useMainGuiStore = create<ISet>((set: SetState<ISet>) => ({
   menuOptions: ['package.json', 'Vite', 'Astro'],
   setMenuOptions: (update: any[]) =>
     set((_state: ISet) => {
