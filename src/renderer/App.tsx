@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 
 import 'xterm/css/xterm.css'
 
+import { useWindowSize } from '@react-hook/window-size'
 import TopBar from './components/top-bar'
 import { VitePage } from './pages-soup/vite-page'
 import { MainUI } from './areas/main-gui/MainUI'
@@ -25,9 +26,13 @@ import { MainUI } from './areas/main-gui/MainUI'
 // }
 
 function App() {
+  const [_width, height] = useWindowSize()
+
   return (
-    <div tw="h-screen w-screen flex flex-col pt-12">
-      <TopBar />
+    <div tw=" w-screen flex flex-col" style={{ height }}>
+      {/* <TopBar /> */}
+      <div style={{ height: 40 }}></div>
+      {/* <div style={{ height: '2rem' }}></div> */}
       {/* here store like a container for the tap-left-panel, and main UI... copy r3f-stair thing? */}
       {/* <VitePage /> */}
       <MainUI />

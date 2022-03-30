@@ -71,10 +71,14 @@ export const VitePage: React.FC<VitePageProps> = () => {
   // }, [lastOutput])
 
   useEffect(() => {
+    console.log('~~~~~~~~~~~~~~~hit dis')
+
     if (!isMounted) {
       // needed?
       setIsMounted(true)
       const terminalDOM = document.getElementById('terminal')
+      console.log('hit dis')
+
       if (terminalDOM) {
         term.open(terminalDOM)
 
@@ -92,9 +96,10 @@ export const VitePage: React.FC<VitePageProps> = () => {
           console.log('event onData', e)
           ipcRenderer.send('terminal.keystroke', e)
         })
-
-        runCommand('export TERM=', ipcRenderer, true)
-        // needed?
+        console.log('hit dat')
+        runCommand('export TERM=xterm', ipcRenderer, true)
+        //is this right?
+        // https://stackoverflow.com/questions/16242025/term-environment-variable-not-set
       }
     }
   }, [])
@@ -105,7 +110,7 @@ export const VitePage: React.FC<VitePageProps> = () => {
     <Container>
       <Heading>Vite Page</Heading>
 
-      <PageTypePicker setSelectedValue={setSelectedPageType} />
+      {/* <PageTypePicker setSelectedValue={setSelectedPageType} /> */}
 
       <ButtonContainer style={{}}>
         <button onClick={() => runCommand('clear', ipcRenderer, true)}>
@@ -162,6 +167,7 @@ export const VitePage: React.FC<VitePageProps> = () => {
         id="terminal"
         style={{
           display: showTerminal ? 'initial' : 'none'
+          // width: '100px'
         }}
       ></div>
       {/* ^^Do something special with this */}

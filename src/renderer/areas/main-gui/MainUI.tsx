@@ -10,9 +10,9 @@ export const MainUI: React.VFC<{}> = () => {
   const [width, height] = useWindowSize()
 
   return (
-    <MainUiContainer>
+    <MainUiContainer style={{ height: height - 40 }}>
       <Sidebar sidebarWidth={defaultSidebardWidth} />
-      <GuiBody style={{ height, width: width - defaultSidebardWidth }}>
+      <GuiBody style={{ height: '100%', width: width - defaultSidebardWidth }}>
         <VitePage />
       </GuiBody>
     </MainUiContainer>
@@ -21,6 +21,12 @@ export const MainUI: React.VFC<{}> = () => {
 
 const MainUiContainer = styled.div`
   display: flex;
+  /* height: 30%; */
+  /* overflow: hidden; */
+  /* height: 100%; */
+  /* padding-top: 40px; */
 `
 
-const GuiBody = styled.div``
+const GuiBody = styled.div`
+  overflow-y: scroll;
+`
