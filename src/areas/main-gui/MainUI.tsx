@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useWindowSize } from '@react-hook/window-size';
 import styled from 'styled-components';
-import { PackageJsonPage } from '../../pages-soup/package-json-page';
+import { PackageJsonPage } from '../../pages-soup/package-json/package-json-page';
 import { VitePage } from '../../pages-soup/vite-page';
 
 import { Sidebar } from './Sidebar';

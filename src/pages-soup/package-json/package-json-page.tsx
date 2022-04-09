@@ -8,41 +8,30 @@ interface props {
 }
 
 export const PackageJsonPage: React.FC<props> = ({ style }) => {
-  const [isOpen, setOpen] = useState(false);
-  const [isSent, setSent] = useState(false);
   const [fromMain, setFromMain] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('G    sendGoGetFile();    sendGoGetFile();    ');
-    // setTimeout(() => {
+    if (window.Main) {
+      window.Main.on('getFile', (message: string) => {
+        setFromMain(message);
+        getJsonFromString(message);
+      });
+    }
     sendGoGetFile();
-    // }, 1000);
   }, []);
 
-  const handleToggle = () => {
-    if (isOpen) {
-      setOpen(false);
-      setSent(false);
-    } else {
-      setOpen(true);
-      setFromMain(null);
-    }
-  };
   const sendGoGetFile = () => {
     if (window.Main) {
       window.Main.goGetFile("Hello I'm GETTING FILE???!");
     } else {
       setFromMain('You are in a Browser, so no Electron functions are available');
     }
-    setSent(true);
   };
 
-  useEffect(() => {
-    if (isSent && window.Main)
-      window.Main.on('getFile', (message: string) => {
-        setFromMain(message);
-      });
-  }, [fromMain, isSent]);
+  const getJsonFromString = (inputPoo: string) => {
+    const daJson = JSON.parse(inputPoo);
+    console.log(daJson);
+  };
 
   return (
     <Container style={style}>
