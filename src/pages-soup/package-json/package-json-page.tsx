@@ -45,7 +45,11 @@ export const PackageJsonPage: React.FC<props> = ({ style }) => {
         <h1 className="text-2xl text-black"> package.json</h1>
         {highLevelKeys && packaheJsonJson
           ? highLevelKeys.map((highLevelKey) => (
-              <JsonSection key={highLevelKey} topProperty={highLevelKey} children={[]} />
+              <JsonSection
+                key={highLevelKey}
+                topProperty={highLevelKey}
+                values={packaheJsonJson[highLevelKey]}
+              />
             ))
           : null}
 
