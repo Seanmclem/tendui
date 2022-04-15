@@ -2,6 +2,8 @@
 import { join } from 'path';
 import * as fs from 'fs/promises';
 
+import contextMenu from 'electron-context-menu';
+
 // Packages
 import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron';
 import isDev from 'electron-is-dev';
@@ -22,6 +24,16 @@ function createWindow() {
     webPreferences: {
       preload: join(__dirname, 'preload.js')
     }
+  });
+
+  contextMenu({
+    showSearchWithGoogle: false,
+    showCopyImage: false,
+    prepend: () => [
+      {
+        label: 'its like magic 💥'
+      }
+    ]
   });
 
   const port = process.env.PORT || 3000;
