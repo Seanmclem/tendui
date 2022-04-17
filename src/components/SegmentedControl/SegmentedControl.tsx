@@ -14,7 +14,12 @@ interface SegmentedControlProps {
   callback: (arg: string, arg2: number) => void;
   defaultIndex?: number;
 }
-const SegmentedControl: React.FC<SegmentedControlProps> = ({ name, segments, callback, defaultIndex = 0 }) => {
+const SegmentedControl: React.FC<SegmentedControlProps> = ({
+  name,
+  segments,
+  callback,
+  defaultIndex = 0
+}) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex);
   const componentReady = useRef<any>();
 
@@ -45,7 +50,11 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({ name, segments, cal
         <Controls123 widthOff={offsetWidthNumber} pos={offsetLeftNumber} />
 
         {segments?.map((item, i) => (
-          <div key={item.value} className={`segment ${i === activeIndex ? 'active' : 'inactive'}`} ref={item.ref}>
+          <div
+            key={item.value}
+            className={`segment ${i === activeIndex ? 'active' : 'inactive'}`}
+            ref={item.ref}
+          >
             <input
               type="radio"
               value={item.value}
@@ -69,7 +78,7 @@ const Controls123 = styled.div<{ widthOff: string; pos: string }>`
   transform: ${(props: any) => props.pos};
 
   content: '';
-  background: #5465ff;
+  background: #1d32f1;
   border-radius: 8px;
 
   position: absolute;

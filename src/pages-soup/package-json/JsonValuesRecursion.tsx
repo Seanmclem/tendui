@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { JsonSection } from './JsonSection';
 
-export const JsonValuesRecursion = (values: any) => {
+interface props {
+  values: any;
+}
+
+export const JsonValuesRecursion: React.FC<props> = ({ values }) => {
   // console.log('type', values);
 
-  const [theRealJsonValue] = useState(values?.values);
+  const [theRealJsonValue] = useState(values);
 
   const [booleanValue, setBooleanValue] = useState(theRealJsonValue);
 
@@ -24,11 +28,11 @@ export const JsonValuesRecursion = (values: any) => {
   } else if (typeof theRealJsonValue?.length === 'number') {
     // ARRAY
     return (
-      <>
+      <ArrayList>
         {theRealJsonValue.map((theValue: any) => (
           <JsonValuesRecursion values={theValue} />
         ))}
-      </>
+      </ArrayList>
     );
   } else if (typeof theRealJsonValue === 'object') {
     // OBJECT
@@ -51,11 +55,9 @@ export const JsonValuesRecursion = (values: any) => {
   }
 };
 
-const KeyText = styled.div`
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const ValuesContainer = styled.div`
-  padding: 10px 0px 10px 20px;
+const ArrayList = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  max-width: 240px;
 `;

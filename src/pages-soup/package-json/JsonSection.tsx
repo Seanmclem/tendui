@@ -5,16 +5,23 @@ import { JsonValuesRecursion } from './JsonValuesRecursion';
 interface props {
   topProperty: string;
   values: any;
+  type?: 'OBJECT' | 'ARRAY';
 }
 
-export const JsonSection: React.FC<props> = ({ topProperty, values }) => {
+export const JsonSection: React.FC<props> = ({ topProperty, values, type = '' }) => {
   if (topProperty && values) {
     // console.log('topProperty', topProperty);
 
     // console.log('values', values);
     return (
       <Container>
-        <KeyText>{topProperty}</KeyText>
+        <KeyText>
+          {topProperty}
+          {/* {type === 'OBJECT' ? `(${values})` : ''} */}
+          {typeof values?.length === 'number' && typeof values !== 'string'
+            ? `(ARRAY)(${values?.length})`
+            : ''}
+        </KeyText>
         <ValuesContainer>
           <JsonValuesRecursion values={values} />
         </ValuesContainer>

@@ -25,6 +25,8 @@ body {
 
 .controls {
   display: inline-flex;
+  height: 45px;
+  align-items: center;
   justify-content: space-between;
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -70,8 +72,8 @@ body {
 }
 
 .controls123 {
-  content: "";
-  background: #5465ff;
+  content: '';
+  background: darkgray;
   border-radius: 8px;
   /* width: var(--highlight-width); */
   /* transform: translateX(var(--highlight-x-pos)); */
