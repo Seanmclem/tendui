@@ -32,6 +32,7 @@ export const ScriptsTab: React.FC<props> = ({ selectedPageType, packaheJsonJson 
               <TwoToneLabel>Actions: </TwoToneLabel>
               <ActionsBody>
                 <ScriptAction type="run" script={highLevelKey} />
+                <ScriptAction type="favorite" script={highLevelKey} />
               </ActionsBody>
             </ScriptRow>
           </ScriptContainer>
