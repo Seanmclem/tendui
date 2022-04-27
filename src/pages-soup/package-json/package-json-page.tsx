@@ -27,6 +27,7 @@ export const PackageJsonPage: React.FC<props> = ({ style }) => {
   }, []);
 
   const sendGoGetFile = () => {
+    // native-1
     if (window.Main) {
       window.Main.goGetFile("Hello I'm GETTING FILE???!");
     } else {

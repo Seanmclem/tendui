@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Spacer } from '../../components/common/Spacer';
-import { useMainGuiStore } from './main-gui-store';
+import { useMainGuiStore } from '../../stores/main-gui-store';
 
 interface Props {
   sidebarWidth: number;
@@ -18,7 +18,10 @@ export const Sidebar: React.FC<Props> = ({ sidebarWidth }) => {
 
       {menuOptions.map((option) => (
         <div key={option}>
-          <Text selected={selectedMenuOption === option} onClick={() => setSelectedMenuOption(option)}>
+          <Text
+            selected={selectedMenuOption === option}
+            onClick={() => setSelectedMenuOption(option)}
+          >
             {option}
           </Text>
         </div>

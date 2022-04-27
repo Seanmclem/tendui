@@ -9,7 +9,7 @@ interface ISet {
 }
 
 export const useMainGuiStore = create<ISet>((set: SetState<ISet>) => ({
-  menuOptions: ['package.json', 'Vite', 'Astro'],
+  menuOptions: ['Home', 'package.json', 'Vite', 'Astro'],
   setMenuOptions: (update: any[]) =>
     set((_state: ISet) => {
       return { menuOptions: update };

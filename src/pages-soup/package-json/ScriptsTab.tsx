@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IoPlayOutline, IoStopOutline, IoTerminal } from 'react-icons/io5';
 import { ScriptAction } from './ScriptAction';
+import { StandardContainer } from '../../components/common/styled-generic';
 
 interface props {
   selectedPageType: string;
@@ -42,12 +43,10 @@ export const ScriptsTab: React.FC<props> = ({ selectedPageType, packaheJsonJson 
   );
 };
 
-const ActionButton = styled.div``;
+// const ActionButton = styled.div``;
 
 const Container = styled.div``;
-const StandardContainer = styled.div`
-  padding: 5%;
-`;
+
 const ScriptContainer = styled.div`
   margin: 10px 0;
   border: 1px solid black;

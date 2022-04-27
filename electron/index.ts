@@ -5,7 +5,7 @@ import * as fs from 'fs/promises';
 import contextMenu from 'electron-context-menu';
 
 // Packages
-import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron';
+import { BrowserWindow, app, ipcMain, IpcMainEvent, dialog } from 'electron';
 import isDev from 'electron-is-dev';
 
 const height = 600;
@@ -94,6 +94,8 @@ ipcMain.on('message', (event: IpcMainEvent, message: any) => {
 });
 
 ipcMain.on('getFile', async (event: IpcMainEvent, message?: any) => {
+  // native-3
+
   console.log({ message });
   const bufferIdk = await fs.readFile(join(__dirname, '../package.json'));
   const textOutput = bufferIdk.toString();
@@ -102,3 +104,18 @@ ipcMain.on('getFile', async (event: IpcMainEvent, message?: any) => {
   // return textOutput;
 });
 // try elecctron fs dialogs https://www.electronjs.org/docs/latest/api/dialog
+
+ipcMain.on('getFolder', async (event: IpcMainEvent, _message?: any) => {
+  // native-3
+  console.log('THREE 33');
+  const result = await dialog.showOpenDialog({
+    properties: ['openDirectory', 'multiSelections']
+  });
+
+  const selectedFolderPath = result.filePaths[0];
+
+  const dirs = await fs.readdir(selectedFolderPath);
+
+  // const poo = await dirs.();
+  event.sender.send('getFolderResponse', { contents: dirs, selectedFolderPath });
+});

@@ -6,7 +6,8 @@ import { PackageJsonPage } from '../../pages-soup/package-json/package-json-page
 import { VitePage } from '../../pages-soup/vite-page';
 
 import { Sidebar } from './Sidebar';
-import { useMainGuiStore } from './main-gui-store';
+import { useMainGuiStore } from '../../stores/main-gui-store';
+import { HomePage } from '../../pages-soup/home/HomePage';
 
 const defaultSidebardWidth = 150;
 
@@ -26,6 +27,11 @@ export const MainUI: React.VFC<{}> = () => {
         <PackageJsonPage
           style={{
             display: selectedMenuOption === 'package.json' ? 'initial' : 'none'
+          }}
+        />
+        <HomePage
+          style={{
+            display: selectedMenuOption === 'Home' ? 'initial' : 'none'
           }}
         />
       </GuiBody>

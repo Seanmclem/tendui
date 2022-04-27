@@ -15,7 +15,19 @@ const api = {
    *
    * The function below can accessed using `window.Main.sayHello`
    */
+
+  //
+
+  goGetFolder: (message?: string) => {
+    // native-2
+    console.log('native 2');
+    ipcRenderer.send('getFolder', message);
+  },
+
   goGetFile: (message?: string) => {
+    // native-2
+    console.log('native b');
+
     ipcRenderer.send('getFile', message);
   },
   sendMessage: (message: string) => {
