@@ -1,4 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron';
+// import { CreateFilePayload } from '../src/constants-types/generic-types';
 
 declare global {
   interface Window {
@@ -17,6 +18,10 @@ const api = {
    */
 
   //
+
+  saveFilePlease: (payload: any) => {
+    ipcRenderer.send('saveFile', payload);
+  },
 
   goGetFolder: (message?: string) => {
     // native-2

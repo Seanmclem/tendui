@@ -7,6 +7,7 @@ import contextMenu from 'electron-context-menu';
 // Packages
 import { BrowserWindow, app, ipcMain, IpcMainEvent, dialog } from 'electron';
 import isDev from 'electron-is-dev';
+// import { CreateFilePayload } from '../src/constants-types/generic-types';
 
 const height = 600;
 const width = 800;
@@ -118,4 +119,11 @@ ipcMain.on('getFolder', async (event: IpcMainEvent, _message?: any) => {
 
   // const poo = await dirs.();
   event.sender.send('getFolderResponse', { contents: dirs, selectedFolderPath });
+});
+
+ipcMain.on('saveFile', async (event: IpcMainEvent, payload: any) => {
+  const { path, contents } = payload;
+  await fs.writeFile(path, contents.toString());
+  // need try-catch, errors, handling
+  event.sender.send('saveFileResponse', 'success!');
 });

@@ -6,6 +6,9 @@ import { useEffect, useRef, useState } from 'react';
 import 'xterm/css/xterm.css';
 import styled from 'styled-components';
 import { StandardContainer } from '../../components/common/styled-generic';
+import { CreateProjetDialogForm } from './CreateProjetDialogForm';
+import { CONFIG_FILE_NAME } from '../../constants-types/generic-constants';
+// import { CreateFilePayload } from '../../constants-types/generic-types';
 
 const term = new Terminal({
   // theme: {
@@ -22,7 +25,9 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
   const [showTerminal, setShowTerminal] = useState(true);
 
   const [projectRootPath, setProjectRootPath] = useState<string>('');
+  const [projectRootName, setProjectRootName] = useState<string>('');
   const [directoryContents, setDirectoryContents] = useState<string[]>([]);
+  const [openedCreateConfig_Dialog, setOpenedCreateConfig_Dialog] = useState(false);
 
   useEffect(() => {
     if (!isMounted) {
@@ -35,15 +40,36 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
         term.open(terminalDOM);
       }
     }
+
+    // if (modal?.current) {
+    //   modal.current?.showModal();
+    // }
   }, []);
 
   useEffect(() => {
     if (window.Main) {
-      window.Main.on('getFolderResponse', ({ selectedFolderPath, contents }) => {
-        if (selectedFolderPath && contents?.length && Array.isArray(contents)) {
-          setProjectRootPath(selectedFolderPath);
-          setDirectoryContents(contents);
+      window.Main.on(
+        'getFolderResponse',
+        ({
+          selectedFolderPath,
+          contents
+        }: {
+          selectedFolderPath?: string;
+          contents?: string[];
+        }) => {
+          if (selectedFolderPath && contents?.length && Array.isArray(contents)) {
+            setProjectRootPath(selectedFolderPath);
+            setDirectoryContents(contents);
+            setProjectRootName(
+              selectedFolderPath.split('/')[selectedFolderPath.split('/').length - 1] || ''
+            );
+          }
         }
+      );
+
+      window.Main.on('saveFileResponse', (responsePayload: string) => {
+        console.log(responsePayload);
+        sendGoGetFolder(); // update, to show if we have it or not
       });
     }
   }, []);
@@ -55,21 +81,53 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
     window.Main.goGetFolder("Hello I'm GETTING FolDEr???!");
   };
 
+  const handleCreateConfigFile = (values: { projectName: string }) => {
+    // here, use this to do the config creation, need ipc etc whatever
+
+    const payload: any = {
+      contents: values,
+      path: `${projectRootPath}/${CONFIG_FILE_NAME}`
+    };
+    window.Main.saveFilePlease(payload);
+    console.log(payload);
+  };
+
   return (
     <Container style={{ display: style.display }}>
       <Heading>Home Page</Heading>
-
+      <CreateProjetDialogForm
+        showModal={openedCreateConfig_Dialog}
+        setShowModal={setOpenedCreateConfig_Dialog}
+        projectRootName={projectRootName}
+        handleCreateConfigFile={handleCreateConfigFile}
+      />
       <InnerContainer>
         {projectRootPath ? (
           <ul>
             <li>Project folder: {projectRootPath || 'NONE'}</li>
-            <li>Has Package.json {directoryContents.includes('package.json').toString()}</li>
+            <li>Has Package.json?: {directoryContents.includes('package.json').toString()}</li>
           </ul>
         ) : (
           <label>
             Project folder: NONE <button onClick={sendGoGetFolder}>Open project folder</button>
           </label>
         )}
+
+        {projectRootPath ? (
+          <ul>
+            {directoryContents.includes(CONFIG_FILE_NAME) ? (
+              <li>
+                Has project config file: {CONFIG_FILE_NAME} {/* Make into link for detail idk */}
+              </li>
+            ) : (
+              <li>
+                <button onClick={() => setOpenedCreateConfig_Dialog(true)}>
+                  Create Project file
+                </button>
+              </li>
+            )}
+          </ul>
+        ) : null}
 
         {directoryContents?.length ? (
           <details>
@@ -105,5 +163,5 @@ const InnerContainer = styled(StandardContainer)`
 const Heading = styled.h1`
   font-size: 2rem;
 
-  color: white;
+  color: black;
 `;
