@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 
 import Icon from './assets/icons/Icon-Electron.png';
 
@@ -16,23 +17,23 @@ function AppBar() {
 
   return (
     <>
-      <div className="py-0.5 flex justify-between draggable">
-        <div className="inline-flex">
-          <img className="h-6 lg:-ml-2" src={Icon} alt="Icon of Electron" />
-          <p className="text-xs md:pt-1 md:-ml-1 lg:-ml-2">Vite App</p>
+      <One1 className="draggable">
+        <div style={{ display: 'inline-flex' }}>
+          <Img2 src={Icon} alt="Icon of Electron" />
+          <Heading3>Vite App</Heading3>
         </div>
-        <div className="inline-flex -mt-1">
-          <button onClick={window.Main.Minimize} className="undraggable md:px-4 lg:px-3 pt-1 hover:bg-gray-300">
+        <One4>
+          <Button5 onClick={window.Main.Minimize} className="undraggable ">
             &#8211;
-          </button>
-          <button onClick={handleToggle} className="undraggable px-6 lg:px-5 pt-1 hover:bg-gray-300">
+          </Button5>
+          <Button6 onClick={handleToggle} className="undraggable ">
             {isMaximize ? '\u2752' : '⃞'}
-          </button>
-          <button onClick={window.Main.Close} className="undraggable px-4 pt-1 hover:bg-red-500 hover:text-white">
+          </Button6>
+          <Button7 onClick={window.Main.Close} className="undraggable ">
             &#10005;
-          </button>
-        </div>
-      </div>
+          </Button7>
+        </One4>
+      </One1>
       {/* <div className="bg-gray-900 text-white undraggable">
         <div className="flex text-center">
           <div className="text-sm w-8  hover:bg-gray-700">File</div>
@@ -47,3 +48,67 @@ function AppBar() {
 }
 
 export default AppBar;
+
+const One1 = styled.div`
+  display: flex;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  display: flex;
+  justify-content: space-between;
+`;
+const Img2 = styled.img`
+  height: 1.5rem;
+
+  @media (min-width: 1024px) {
+    margin-left: -0.5rem;
+  }
+`;
+
+const Heading3 = styled.p`
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1rem;
+
+  @media (min-width: 768px) {
+    padding-top: 0.25rem;
+    margin-left: -0.25rem;
+  }
+  @media (min-width: 1024px) {
+    margin-left: -0.5rem;
+  }
+`;
+
+const One4 = styled.div`
+  display: inline-flex;
+  margin-top: -0.25rem;
+  display: inline-flex;
+`;
+
+const Button5 = styled.div`
+  padding-top: 0.25rem;
+
+  @media (min-width: 768px) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 1024px) {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+`;
+
+const Button6 = styled.div`
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.25rem;
+
+  @media (min-width: 1024px) {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+`;
+const Button7 = styled.div`
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+`;

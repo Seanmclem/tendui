@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import AppBar from './AppBar';
 import { MainUI } from './areas/main-gui/MainUI';
 
@@ -6,17 +7,31 @@ function App() {
   // console.log(window.ipcRenderer);
 
   return (
-    <div className="flex flex-col h-screen">
+    <AppContianer>
       {window.Main && (
-        <div className="flex-none">
+        <AppBarContianer>
           <AppBar />
-        </div>
+        </AppBarContianer>
       )}
-      <div className="flex-auto bg-gray-800">
+      <MainUIContianer>
         <MainUI />
-      </div>
-    </div>
+      </MainUIContianer>
+    </AppContianer>
   );
 }
 
 export default App;
+
+const AppContianer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
+
+const AppBarContianer = styled.div`
+  flex: none;
+`;
+
+const MainUIContianer = styled.div`
+  flex: 1 1 auto;
+`;

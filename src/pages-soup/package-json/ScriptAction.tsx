@@ -70,6 +70,8 @@ const Container = styled(animated.button)<{ theColor: string }>`
   background-color: ${({ theColor }) => theColor};
   padding: 1px 5px;
   margin: 2px 5px 2px 0px;
+  border: none;
+  border-radius: 3px;
 `;
 
 const ButtonText = styled.div``;

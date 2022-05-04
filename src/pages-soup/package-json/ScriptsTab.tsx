@@ -23,14 +23,16 @@ export const ScriptsTab: React.FC<props> = ({ selectedPageType, packaheJsonJson 
         {theKeys.map((highLevelKey) => (
           <ScriptContainer>
             <ScriptRow>
-              <ScriptLabel>Name: </ScriptLabel> <LabelBody>{highLevelKey}</LabelBody>
+              <TwoToneLabel>Name: </TwoToneLabel> <LabelBody>{highLevelKey}</LabelBody>
             </ScriptRow>
             <ScriptRow>
               <TwoToneLabel>Command: </TwoToneLabel>
               <ScriptBody>{packaheJsonJson['scripts'][highLevelKey]}</ScriptBody>
             </ScriptRow>
             <ScriptRow border={false}>
-              <TwoToneLabel>Actions: </TwoToneLabel>
+              <TwoToneLabel>
+                <div>Actions: </div>
+              </TwoToneLabel>
               <ActionsBody>
                 <ScriptAction type="run" script={highLevelKey} />
                 <ScriptAction type="favorite" script={highLevelKey} />
@@ -54,11 +56,15 @@ const ScriptContainer = styled.div`
   overflow: hidden;
 `;
 const ScriptBody = styled.p`
+  margin: 0;
+  padding: 3px;
   padding-left: 10px;
 `;
 
 const TwoToneLabel = styled.div`
   padding-left: 10px;
+  display: flex;
+  align-items: center;
   background-color: lightblue;
   min-width: 6em;
   width: 6em;
@@ -69,12 +75,14 @@ const ScriptRow = styled.div<{ border?: boolean }>`
   border-bottom: ${({ border }) => (border === false ? 'none' : `1px solid darkblue`)};
 `;
 
-const ScriptLabel = styled(TwoToneLabel)``;
+// const ScriptLabel = styled(TwoToneLabel)``;
 const LabelBody = styled.div`
+  padding: 3px;
   padding-left: 10px;
 `;
 
 const ActionsBody = styled.div`
+  padding: 3px;
   padding-left: 10px;
   display: flex;
   align-items: center;
