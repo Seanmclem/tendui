@@ -36,6 +36,8 @@
     "@vitejs/plugin-react": "^1.2.0",
     "electron-context-menu": "^3.1.2",
     "electron-is-dev": "^2.0.0",
+    "electron-settings": "^4.0.2",
+    "electron-store": "^8.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",

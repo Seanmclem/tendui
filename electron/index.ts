@@ -106,19 +106,23 @@ ipcMain.on('getFile', async (event: IpcMainEvent, message?: any) => {
 });
 // try elecctron fs dialogs https://www.electronjs.org/docs/latest/api/dialog
 
-ipcMain.on('getFolder', async (event: IpcMainEvent, _message?: any) => {
-  // native-3
-  console.log('THREE 33');
+ipcMain.on('goGetFolderOpenDialg', async (event: IpcMainEvent) => {
   const result = await dialog.showOpenDialog({
     properties: ['openDirectory', 'multiSelections']
   });
-
   const selectedFolderPath = result.filePaths[0];
-
   const dirs = await fs.readdir(selectedFolderPath);
 
-  // const poo = await dirs.();
   event.sender.send('getFolderResponse', { contents: dirs, selectedFolderPath });
+});
+
+ipcMain.on('goGetSpecificFolder', async (event: IpcMainEvent, selectedFolderPath?: string) => {
+  if (!selectedFolderPath) {
+    return false;
+  }
+  const dirs = await fs.readdir(selectedFolderPath);
+
+  event.sender.send('goGetSpecificFolder_Response', { contents: dirs, selectedFolderPath });
 });
 
 ipcMain.on('saveFile', async (event: IpcMainEvent, payload: any) => {

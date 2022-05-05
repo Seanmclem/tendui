@@ -8,7 +8,8 @@ import styled from 'styled-components';
 import { StandardContainer } from '../../components/common/styled-generic';
 import { CreateProjetDialogForm } from './CreateProjetDialogForm';
 import { CONFIG_FILE_NAME } from '../../constants-types/generic-constants';
-// import { CreateFilePayload } from '../../constants-types/generic-types';
+import { useProjectStore } from '../../stores/project-store';
+import { CreateFilePayload } from '../../constants-types/generic-types';
 
 const term = new Terminal({
   // theme: {
@@ -24,14 +25,31 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [showTerminal, setShowTerminal] = useState(true);
 
-  const [projectRootPath, setProjectRootPath] = useState<string>('');
+  const projectConfig = useProjectStore((x) => x.projectConfig);
+  const updateProjectConfig = useProjectStore((x) => x.updateProjectConfig);
+
+  const [projectRootPath, setProjectRootPath] = useState<string>(
+    projectConfig?.selectedProject || ''
+  );
   const [projectRootName, setProjectRootName] = useState<string>('');
   const [directoryContents, setDirectoryContents] = useState<string[]>([]);
   const [openedCreateConfig_Dialog, setOpenedCreateConfig_Dialog] = useState(false);
 
   useEffect(() => {
+    // localStorage.setItem('data', JSON.stringify({ test: '123' }));
+    // const cat = localStorage.getItem('myCat');
+    console.log('projectConfig', projectConfig);
+    console.log({ projectRootPath });
+
+    if (projectRootPath) {
+      window.Main.goGetSpecificFolder(projectRootPath);
+    }
+  }, [projectConfig]);
+
+  useEffect(() => {
+    // mount terminal(s?)
     if (!isMounted) {
-      // needed?
+      // needed? ^v
       setIsMounted(true);
       const terminalDOM = document.getElementById('terminal');
       console.log('hit dis');
@@ -40,13 +58,10 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
         term.open(terminalDOM);
       }
     }
-
-    // if (modal?.current) {
-    //   modal.current?.showModal();
-    // }
   }, []);
 
   useEffect(() => {
+    // establish event-listeners for node-callbacks
     if (window.Main) {
       window.Main.on(
         'getFolderResponse',
@@ -68,28 +83,29 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
       );
 
       window.Main.on('saveFileResponse', (responsePayload: string) => {
-        console.log(responsePayload);
         sendGoGetFolder(); // update, to show if we have it or not
+      });
+
+      window.Main.on('goGetSpecificFolder_Response', (responsePayload) => {
+        // console.log({ responsePayload });
+        if (responsePayload?.contents && typeof responsePayload.contents?.length === 'number') {
+          setDirectoryContents(responsePayload.contents);
+        }
       });
     }
   }, []);
 
-  //
   const sendGoGetFolder = () => {
-    // native-1
-    console.log('ONE !');
-    window.Main.goGetFolder("Hello I'm GETTING FolDEr???!");
+    window.Main.goGetFolderOpenDialg();
   };
 
-  const handleCreateConfigFile = (values: { projectName: string }) => {
-    // here, use this to do the config creation, need ipc etc whatever
-
-    const payload: any = {
+  const sendSaveFilePlease = (values: { projectName: string }) => {
+    const payload: CreateFilePayload = {
       contents: values,
       path: `${projectRootPath}/${CONFIG_FILE_NAME}`
     };
     window.Main.saveFilePlease(payload);
-    console.log(payload);
+    updateProjectConfig({ selectedProject: projectRootPath });
   };
 
   return (
@@ -99,11 +115,16 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
         showModal={openedCreateConfig_Dialog}
         setShowModal={setOpenedCreateConfig_Dialog}
         projectRootName={projectRootName}
-        handleCreateConfigFile={handleCreateConfigFile}
+        handleCreateConfigFile={sendSaveFilePlease}
       />
       <InnerContainer>
         {projectRootPath ? (
           <ul>
+            {/* <li>
+              <button onClick={() => updateProjectConfig({ selectedProject: projectRootPath })}>
+                write
+              </button>
+            </li> */}
             <li>Project folder: {projectRootPath || 'NONE'}</li>
             <li>Has Package.json?: {directoryContents.includes('package.json').toString()}</li>
           </ul>

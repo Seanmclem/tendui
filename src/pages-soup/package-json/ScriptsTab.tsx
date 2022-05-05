@@ -21,7 +21,7 @@ export const ScriptsTab: React.FC<props> = ({ selectedPageType, packaheJsonJson 
         <h1>Scripts</h1>
 
         {theKeys.map((highLevelKey) => (
-          <ScriptContainer>
+          <ScriptContainer key={highLevelKey}>
             <ScriptRow>
               <TwoToneLabel>Name: </TwoToneLabel> <LabelBody>{highLevelKey}</LabelBody>
             </ScriptRow>

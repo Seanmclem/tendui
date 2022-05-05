@@ -23,10 +23,12 @@ const api = {
     ipcRenderer.send('saveFile', payload);
   },
 
-  goGetFolder: (message?: string) => {
-    // native-2
-    console.log('native 2');
-    ipcRenderer.send('getFolder', message);
+  goGetFolderOpenDialg: () => {
+    ipcRenderer.send('goGetFolderOpenDialg');
+  },
+
+  goGetSpecificFolder: (path: string) => {
+    ipcRenderer.send('goGetSpecificFolder', path);
   },
 
   goGetFile: (message?: string) => {

@@ -30,14 +30,14 @@ export const JsonValuesRecursion: React.FC<props> = ({ values }) => {
     return (
       <ArrayList>
         {theRealJsonValue.map((theValue: any) => (
-          <JsonValuesRecursion values={theValue} />
+          <JsonValuesRecursion key={theValue} values={theValue} />
         ))}
       </ArrayList>
     );
   } else if (typeof theRealJsonValue === 'object') {
     // OBJECT
     const theKeys = Object.keys(theRealJsonValue);
-    console.log('theKeys', theKeys);
+    // console.log('theKeys', theKeys);
 
     return (
       <>
