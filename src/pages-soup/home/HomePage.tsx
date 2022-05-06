@@ -78,6 +78,20 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
             setProjectRootName(
               selectedFolderPath.split('/')[selectedFolderPath.split('/').length - 1] || ''
             );
+
+            // up[date state]
+            const priorProjects =
+              typeof projectConfig?.recentProjects?.length === 'number'
+                ? [...projectConfig.recentProjects]
+                : [];
+            const updatedRecentProjects = [selectedFolderPath, ...priorProjects];
+            if (updatedRecentProjects.length > 5) {
+              updatedRecentProjects.length = 5;
+            }
+            updateProjectConfig({
+              selectedProject: selectedFolderPath,
+              recentProjects: updatedRecentProjects
+            });
           }
         }
       );
@@ -87,7 +101,6 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
       });
 
       window.Main.on('goGetSpecificFolder_Response', (responsePayload) => {
-        // console.log({ responsePayload });
         if (responsePayload?.contents && typeof responsePayload.contents?.length === 'number') {
           setDirectoryContents(responsePayload.contents);
         }
@@ -105,7 +118,6 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
       path: `${projectRootPath}/${CONFIG_FILE_NAME}`
     };
     window.Main.saveFilePlease(payload);
-    updateProjectConfig({ selectedProject: projectRootPath });
   };
 
   return (
@@ -147,6 +159,14 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
             )}
           </ul>
         ) : null}
+
+        <ul>
+          {projectConfig?.recentProjects
+            ? projectConfig?.recentProjects
+                .filter((x) => x !== projectRootPath)
+                .map((recentProject) => <li>{recentProject}</li>)
+            : null}
+        </ul>
 
         {directoryContents?.length ? (
           <details>
