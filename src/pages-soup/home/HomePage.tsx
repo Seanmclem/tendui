@@ -160,6 +160,7 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
           </ul>
         ) : null}
 
+        <h3>Recent Projects</h3>
         <ul>
           {projectConfig?.recentProjects
             ? projectConfig?.recentProjects
