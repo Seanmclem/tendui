@@ -83,7 +83,7 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
       );
 
       window.Main.on('saveFileResponse', (responsePayload: string) => {
-        sendGoGetFolder(); // update, to show if we have it or not
+        // sendGoGetFolder(); // update, to show if we have it or not
       });
 
       window.Main.on('goGetSpecificFolder_Response', (responsePayload) => {
@@ -120,11 +120,9 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
       <InnerContainer>
         {projectRootPath ? (
           <ul>
-            {/* <li>
-              <button onClick={() => updateProjectConfig({ selectedProject: projectRootPath })}>
-                write
-              </button>
-            </li> */}
+            <li>
+              <button onClick={sendGoGetFolder}>Pick New Project</button>
+            </li>
             <li>Project folder: {projectRootPath || 'NONE'}</li>
             <li>Has Package.json?: {directoryContents.includes('package.json').toString()}</li>
           </ul>
