@@ -94,11 +94,14 @@ ipcMain.on('message', (event: IpcMainEvent, message: any) => {
   setTimeout(() => event.sender.send('message', 'hi from electron'), 500);
 });
 
-ipcMain.on('getFile', async (event: IpcMainEvent, message?: any) => {
+ipcMain.on('getFile', async (event: IpcMainEvent, payload?: string) => {
   // native-3
 
-  console.log({ message });
-  const bufferIdk = await fs.readFile(join(__dirname, '../package.json'));
+  // console.log({ message });
+
+  // join(__dirname, '../package.json')
+
+  const bufferIdk = await fs.readFile(`${payload}/package.json`);
   const textOutput = bufferIdk.toString();
   console.log({ textOutput });
   event.sender.send('getFile', textOutput);
@@ -106,11 +109,20 @@ ipcMain.on('getFile', async (event: IpcMainEvent, message?: any) => {
 });
 // try elecctron fs dialogs https://www.electronjs.org/docs/latest/api/dialog
 
-ipcMain.on('goGetFolderOpenDialg', async (event: IpcMainEvent) => {
-  const result = await dialog.showOpenDialog({
-    properties: ['openDirectory', 'multiSelections']
-  });
-  const selectedFolderPath = result.filePaths[0];
+ipcMain.on('goGetFolderOpenDialg', async (event: IpcMainEvent, payload?: string) => {
+  let selectedFolderPath: string = '';
+  console.log('goGetFolderOpenDialg -> MAIN', payload);
+  if (payload) {
+    // do like, pass the code a path, or if no path -popdialog to pick one
+    selectedFolderPath = payload;
+  } else {
+    const result = await dialog.showOpenDialog({
+      properties: ['openDirectory', 'multiSelections']
+    });
+
+    selectedFolderPath = result.filePaths[0];
+  }
+
   const dirs = await fs.readdir(selectedFolderPath);
 
   event.sender.send('getFolderResponse', { contents: dirs, selectedFolderPath });

@@ -9,9 +9,16 @@ interface props {
 export const JsonValuesRecursion: React.FC<props> = ({ values }) => {
   // console.log('type', values);
 
-  const [theRealJsonValue] = useState(values);
-
+  const [theRealJsonValue, setTheREal] = useState(values);
+  /// HACKY JUNK, PLEASE DELETE ^v
   const [booleanValue, setBooleanValue] = useState(theRealJsonValue);
+
+  useEffect(() => {
+    setTheREal(values);
+    setBooleanValue(values);
+
+    /// HACKY JUNK, PLEASE DELETE ^^
+  }, [values]);
 
   if (typeof theRealJsonValue === 'string' || typeof theRealJsonValue === 'number') {
     // STRING -or- NUMBER

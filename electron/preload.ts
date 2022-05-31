@@ -23,19 +23,20 @@ const api = {
     ipcRenderer.send('saveFile', payload);
   },
 
-  goGetFolderOpenDialg: () => {
-    ipcRenderer.send('goGetFolderOpenDialg');
+  goGetFolderOpenDialg: (payload?: any) => {
+    console.log('goGetFolderOpenDialg -> IPC', payload);
+    ipcRenderer.send('goGetFolderOpenDialg', payload);
   },
 
   goGetSpecificFolder: (path: string) => {
     ipcRenderer.send('goGetSpecificFolder', path);
   },
 
-  goGetFile: (message?: string) => {
+  goGetFile: (payload?: string) => {
     // native-2
     console.log('native b');
 
-    ipcRenderer.send('getFile', message);
+    ipcRenderer.send('getFile', payload);
   },
   sendMessage: (message: string) => {
     ipcRenderer.send('message', message);

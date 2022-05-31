@@ -10,6 +10,7 @@ import { CreateProjetDialogForm } from './CreateProjetDialogForm';
 import { CONFIG_FILE_NAME } from '../../constants-types/generic-constants';
 import { useProjectStore } from '../../stores/project-store';
 import { CreateFilePayload } from '../../constants-types/generic-types';
+import { RecentProjects } from './RecentProjects';
 
 const term = new Terminal({
   // theme: {
@@ -60,41 +61,40 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
     }
   }, []);
 
+  const updateFolder = ({
+    selectedFolderPath,
+    contents
+  }: {
+    selectedFolderPath?: string;
+    contents?: string[];
+  }) => {
+    if (selectedFolderPath && contents?.length && Array.isArray(contents)) {
+      setProjectRootPath(selectedFolderPath);
+      setDirectoryContents(contents);
+      setProjectRootName(
+        selectedFolderPath.split('/')[selectedFolderPath.split('/').length - 1] || ''
+      );
+
+      // up[date state]
+      const priorProjects =
+        typeof projectConfig?.recentProjects?.length === 'number'
+          ? [...projectConfig.recentProjects]
+          : [];
+      const updatedRecentProjects = [selectedFolderPath, ...priorProjects];
+      if (updatedRecentProjects.length > 5) {
+        updatedRecentProjects.length = 5;
+      }
+      updateProjectConfig({
+        selectedProject: selectedFolderPath,
+        recentProjects: updatedRecentProjects
+      });
+    }
+  };
+
   useEffect(() => {
     // establish event-listeners for node-callbacks
     if (window.Main) {
-      window.Main.on(
-        'getFolderResponse',
-        ({
-          selectedFolderPath,
-          contents
-        }: {
-          selectedFolderPath?: string;
-          contents?: string[];
-        }) => {
-          if (selectedFolderPath && contents?.length && Array.isArray(contents)) {
-            setProjectRootPath(selectedFolderPath);
-            setDirectoryContents(contents);
-            setProjectRootName(
-              selectedFolderPath.split('/')[selectedFolderPath.split('/').length - 1] || ''
-            );
-
-            // up[date state]
-            const priorProjects =
-              typeof projectConfig?.recentProjects?.length === 'number'
-                ? [...projectConfig.recentProjects]
-                : [];
-            const updatedRecentProjects = [selectedFolderPath, ...priorProjects];
-            if (updatedRecentProjects.length > 5) {
-              updatedRecentProjects.length = 5;
-            }
-            updateProjectConfig({
-              selectedProject: selectedFolderPath,
-              recentProjects: updatedRecentProjects
-            });
-          }
-        }
-      );
+      window.Main.on('getFolderResponse', updateFolder);
 
       window.Main.on('saveFileResponse', (responsePayload: string) => {
         // sendGoGetFolder(); // update, to show if we have it or not
@@ -160,14 +160,9 @@ export const HomePage: React.FC<HomePageProps> = ({ style }) => {
           </ul>
         ) : null}
 
-        <h3>Recent Projects</h3>
-        <ul>
-          {projectConfig?.recentProjects
-            ? projectConfig?.recentProjects
-                .filter((x) => x !== projectRootPath)
-                .map((recentProject) => <li>{recentProject}</li>)
-            : null}
-        </ul>
+        <RecentProjects projectRootPath={projectRootPath} />
+
+        {/*  OPEN IN VSCODE,,, simple way to test terminal again */}
 
         {directoryContents?.length ? (
           <details>

@@ -5,6 +5,7 @@ import JSONPretty from 'react-json-pretty';
 import { JsonSection } from './JsonSection';
 import { PageTypePicker, Segment } from '../../components/PageTypePicker';
 import { ScriptsTab } from './ScriptsTab';
+import { useProjectStore } from '../../stores/project-store';
 
 interface props {
   style: any;
@@ -16,6 +17,13 @@ export const PackageJsonPage: React.FC<props> = ({ style }) => {
   const [packaheJsonJson, setPackageJsonJson] = useState<any>({});
   const [highLevelKeys, setHighLevelKeys] = useState<string[]>([]);
 
+  const projectConfig = useProjectStore((x) => x.projectConfig);
+  // const updateProjectConfig = useProjectStore((x) => x.updateProjectConfig);
+
+  const [projectRootPath, setProjectRootPath] = useState<string>(
+    projectConfig?.selectedProject || ''
+  );
+
   useEffect(() => {
     if (window.Main) {
       window.Main.on('getFile', (message: string) => {
@@ -23,13 +31,17 @@ export const PackageJsonPage: React.FC<props> = ({ style }) => {
         getJsonFromString(message);
       });
     }
-    sendGoGetFile();
-  }, []);
+    if (projectConfig?.selectedProject) {
+      console.log('BLERP', projectConfig?.selectedProject);
+      sendGoGetFile(projectConfig.selectedProject);
+    }
+  }, [projectConfig]);
 
-  const sendGoGetFile = () => {
+  const sendGoGetFile = (projectRootPath: string) => {
     // native-1
     if (window.Main) {
-      window.Main.goGetFile("Hello I'm GETTING FILE???!");
+      console.log('window.Main.goGetFile(projectRootPath)', projectRootPath);
+      window.Main.goGetFile(projectRootPath);
     } else {
       setFromMain('You are in a Browser, so no Electron functions are available');
     }
@@ -39,7 +51,7 @@ export const PackageJsonPage: React.FC<props> = ({ style }) => {
     const daJson = JSON.parse(inputPoo);
     setHighLevelKeys(Object.keys(daJson));
     setPackageJsonJson(daJson);
-    console.log(daJson);
+    console.log({ daJson });
   };
 
   const [selectedPageType, setSelectedPageType] = useState('edit-all');
