@@ -6,44 +6,32 @@ interface props {
   values: any;
 }
 
+// TODO: replace
 export const JsonValuesRecursion: React.FC<props> = ({ values }) => {
-  // console.log('type', values);
-
-  const [theRealJsonValue, setTheREal] = useState(values);
-  /// HACKY JUNK, PLEASE DELETE ^v
-  const [booleanValue, setBooleanValue] = useState(theRealJsonValue);
-
-  useEffect(() => {
-    setTheREal(values);
-    setBooleanValue(values);
-
-    /// HACKY JUNK, PLEASE DELETE ^^
-  }, [values]);
-
-  if (typeof theRealJsonValue === 'string' || typeof theRealJsonValue === 'number') {
+  if (typeof values === 'string' || typeof values === 'number') {
     // STRING -or- NUMBER
-    return <input type="text" value={theRealJsonValue} onChange={() => null} />;
-  } else if (typeof theRealJsonValue === 'boolean') {
+    return <input type="text" value={values} onChange={() => null} />;
+  } else if (typeof values === 'boolean') {
     // BOOLEAN
     return (
       <input
         type={'checkbox'}
-        checked={booleanValue}
-        onChange={() => setBooleanValue(!booleanValue)} // does it work?
+        checked={values}
+        // onChange={() => setvalues(!values)} // does it work? /// ... TODO: bubble up
       />
     );
-  } else if (typeof theRealJsonValue?.length === 'number') {
+  } else if (typeof values?.length === 'number') {
     // ARRAY
     return (
       <ArrayList>
-        {theRealJsonValue.map((theValue: any) => (
+        {values.map((theValue: any) => (
           <JsonValuesRecursion key={theValue} values={theValue} />
         ))}
       </ArrayList>
     );
-  } else if (typeof theRealJsonValue === 'object') {
+  } else if (typeof values === 'object') {
     // OBJECT
-    const theKeys = Object.keys(theRealJsonValue);
+    const theKeys = Object.keys(values);
     // console.log('theKeys', theKeys);
 
     return (
@@ -52,7 +40,7 @@ export const JsonValuesRecursion: React.FC<props> = ({ values }) => {
           <JsonSection
             key={highLevelKey}
             topProperty={highLevelKey}
-            values={theRealJsonValue[highLevelKey]}
+            values={values[highLevelKey]}
           />
         ))}
       </>
