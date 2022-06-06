@@ -1,13 +1,15 @@
 import React from 'react';
 
 // const { ipcRenderer } = window.require('electron');
-import { Terminal } from 'xterm';
+// import { Terminal } from 'xterm';
 import { useEffect, useRef, useState } from 'react';
 import 'xterm/css/xterm.css';
 import styled from 'styled-components';
 import { removeColor, runCommand } from '../utils/commander-utils';
 import { createCommand } from '../commanders/vite-commander';
 import { PageTypePicker } from '../components/PageTypePicker';
+
+import { Terminal } from 'xterm';
 
 //
 
@@ -84,7 +86,9 @@ export const VitePage: React.FC<VitePageProps> = ({ style }) => {
       console.log('hit dis');
 
       if (terminalDOM) {
+        // window.Main.setupIpcTerminal(terminalDOM);
         term.open(terminalDOM);
+        // ^^ send event instead
 
         // ipcRenderer.on('terminal.incomingData', (event, data: string) => {
         //   //console.log('incomingData', removeColor(data))
@@ -96,10 +100,19 @@ export const VitePage: React.FC<VitePageProps> = ({ style }) => {
 
         // PreExec is output right before command is
 
-        // term.onData((e) => {
-        //   console.log('event onData', e);
-        //   ipcRenderer.send('terminal.keystroke', e);
-        // });
+        term.onData((text: string) => {
+          console.log('event onData', text);
+          window.Main.sendKeystroke(text);
+          // Render: terminal.keystroke
+        });
+
+        window.Main.on('terminal.incomingData', (data) => {
+          console.log({ 'terminal.incomingData2': data });
+
+          term.write(data); // PROBLEM: this is not getting hit
+        });
+
+        runCommand('export TERM=xterm', true);
         // console.log('hit dat');
         // runCommand('export TERM=xterm', ipcRenderer, true);
         //is this right?

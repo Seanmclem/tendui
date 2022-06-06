@@ -14,7 +14,11 @@ Might need to run
 
 `yarn rebuild`
 
-Due to node-pty
+Due to node-pty //? but it's not installed, node-pty
+
+## Build
+
+`yarn build`
 
 ---
 

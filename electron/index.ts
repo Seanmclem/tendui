@@ -9,8 +9,14 @@ import { BrowserWindow, app, ipcMain, IpcMainEvent, dialog } from 'electron';
 import isDev from 'electron-is-dev';
 // import { CreateFilePayload } from '../src/constants-types/generic-types';
 
+const os = require('os');
+const pty = require('node-pty');
+const shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
+
 const height = 600;
 const width = 800;
+
+let poop: any = undefined;
 
 function createWindow() {
   // Create the browser window.
@@ -26,6 +32,8 @@ function createWindow() {
       preload: join(__dirname, 'preload.js')
     }
   });
+
+  poop = window;
 
   contextMenu({
     showSearchWithGoogle: false,
@@ -93,6 +101,52 @@ ipcMain.on('message', (event: IpcMainEvent, message: any) => {
   console.log(message);
   setTimeout(() => event.sender.send('message', 'hi from electron'), 500);
 });
+
+// ipcMain.on('terminalDOM', (_event: IpcMainEvent, terminalDOMPayload: any) => {
+//   // setTimeout(() => event.sender.send('message', 'hi from electron'), 500);
+//   term.open(terminalDOMPayload);
+// });
+
+ipcMain.on('terminal.keystroke', (_event, payload) => {
+  console.log({ 'terminal.keystroke.payload': payload });
+  ptyProcess.write(payload);
+});
+
+// ^v : test me
+
+const ptyProcess = pty.spawn(shell, [], {
+  name: 'xterm-color',
+  cols: 80,
+  rows: 30,
+  cwd: process.env.HOME,
+  env: process.env
+});
+
+// term.onData((eventData: string) => {
+//   ptyProcess.write(eventData);
+// });
+
+ptyProcess.on('data', function (data: any) {
+  // can use specific "ptyProcess" per terminal, save in store...
+
+  // the send/on are just ipcMain alts, defined and consumed events
+  console.log('trying terminal.incomingData');
+  // ipcMain.emit('terminal.incomingData', data);
+  poop?.webContents?.send('terminal.incomingData', data);
+  // PROBLEM: ^^ this is not getting hit
+  //??
+
+  //event.sender.send('terminal.incomingData', data) // sends to frontend
+  // ^^^ NOT Needed, can directly term.write
+  //term.write(data);
+  // console.log('Data sent')
+});
+
+// instead: term.onData ->  ptyProcess.write(eventData)
+// ipcMain.on('terminal.keystroke', (event, key) => {
+//   console.log({ key })
+//   ptyProcess.write(key)
+// })
 
 ipcMain.on('getFile', async (event: IpcMainEvent, payload?: string) => {
   // native-3

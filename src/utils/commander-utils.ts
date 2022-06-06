@@ -1,18 +1,15 @@
-export const runCommand = (
-  command: string,
-  ipcRenderer: any,
-  enter = false
-) => {
+export const runCommand = (command: string, enter = false) => {
+  const fn = window.Main.sendKeystroke;
   if (enter) {
-    ipcRenderer.send('terminal.keystroke', `${command}${`\n`}`)
+    fn(`${command}${`\n`}`);
   } else {
-    ipcRenderer.send('terminal.keystroke', `${command}`)
+    fn(`${command}`);
   }
-}
+};
 
 export const removeColor = (stringWithColor: string) =>
   stringWithColor.replace(
     // eslint-disable-next-line no-control-regex
     /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
     ''
-  )
+  );

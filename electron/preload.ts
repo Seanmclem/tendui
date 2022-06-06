@@ -19,6 +19,11 @@ const api = {
 
   //
 
+  sendKeystroke: (payload: any) => {
+    //'terminal.keystroke',
+    ipcRenderer.send('terminal.keystroke', payload);
+  },
+
   saveFilePlease: (payload: any) => {
     ipcRenderer.send('saveFile', payload);
   },
