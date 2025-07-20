@@ -18,6 +18,9 @@ const width = 800;
 
 let poop: any = undefined;
 
+// Store multiple terminal instances
+const terminalProcesses = new Map<string, any>();
+
 function createWindow() {
   // Create the browser window.
   const window = new BrowserWindow({
@@ -102,18 +105,58 @@ ipcMain.on('message', (event: IpcMainEvent, message: any) => {
   setTimeout(() => event.sender.send('message', 'hi from electron'), 500);
 });
 
-// ipcMain.on('terminalDOM', (_event: IpcMainEvent, terminalDOMPayload: any) => {
-//   // setTimeout(() => event.sender.send('message', 'hi from electron'), 500);
-//   term.open(terminalDOMPayload);
-// });
+// Terminal management
+ipcMain.on('terminal.create', (_event: IpcMainEvent, terminalId: string) => {
+  console.log('Creating terminal:', terminalId);
 
-ipcMain.on('terminal.keystroke', (_event, payload) => {
-  console.log({ 'terminal.keystroke.payload': payload });
-  ptyProcess.write(payload);
+  const ptyProcess = pty.spawn(shell, [], {
+    name: 'xterm-color',
+    cols: 80,
+    rows: 30,
+    cwd: process.env.HOME,
+    env: process.env
+  });
+
+  // Store the process
+  terminalProcesses.set(terminalId, ptyProcess);
+
+  // Handle data from this specific terminal
+  ptyProcess.on('data', function (data: any) {
+    console.log(`Terminal ${terminalId} data:`, data);
+    poop?.webContents?.send('terminal.incomingData', { terminalId, data });
+  });
+
+  // Handle process exit
+  ptyProcess.on('exit', function (exitCode: number) {
+    console.log(`Terminal ${terminalId} exited with code:`, exitCode);
+    terminalProcesses.delete(terminalId);
+  });
+});
+
+ipcMain.on('terminal.remove', (_event: IpcMainEvent, terminalId: string) => {
+  console.log('Removing terminal:', terminalId);
+
+  const ptyProcess = terminalProcesses.get(terminalId);
+  if (ptyProcess) {
+    ptyProcess.kill();
+    terminalProcesses.delete(terminalId);
+  }
+});
+
+ipcMain.on('terminal.keystroke', (_event, { terminalId, payload }) => {
+  console.log({ 'terminal.keystroke.payload': { terminalId, payload } });
+
+  const ptyProcess = terminalProcesses.get(terminalId);
+  if (ptyProcess) {
+    ptyProcess.write(payload);
+  } else {
+    console.warn(`Terminal ${terminalId} not found`);
+  }
 });
 
 // ^v : test me
 
+// Legacy single terminal process (keeping for backward compatibility)
 const ptyProcess = pty.spawn(shell, [], {
   name: 'xterm-color',
   cols: 80,

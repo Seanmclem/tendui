@@ -53,14 +53,14 @@ const manageOutput = (output?: string) => {
   }
   // console.log(firstCharacter)
 
-  const currentDialog = {
-    dialogType: 'QUESTION', // loading indicators, etc
-    currentPromptType: 'CHOICES',
-    data: {
-      dialogText: "what's the choice",
-      currentPromptText: ' 3 choices'
-    }
-  };
+  // const currentDialog = {
+  //   dialogType: 'QUESTION', // loading indicators, etc
+  //   currentPromptType: 'CHOICES',
+  //   data: {
+  //     dialogText: "what's the choice",
+  //     currentPromptText: ' 3 choices'
+  //   }
+  // };
 
   return result;
 };
@@ -158,7 +158,7 @@ export const VitePage: React.FC<VitePageProps> = ({ style }) => {
 
         <button onClick={() => setShowTerminal(!showTerminal)}>Toggle Termnal</button>
       </ButtonContainer> */}
-      <h3 className="h-3 bg-white h-10">{`Last Promt: ${manageOutput(lastOutput) || 'none'}`}</h3>
+      <h3 className="bg-white h-10">{`Last Prompt: ${manageOutput(lastOutput) || 'none'}`}</h3>
       <div
         id="terminal"
         style={{

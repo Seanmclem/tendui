@@ -4,6 +4,7 @@ import { useWindowSize } from '@react-hook/window-size';
 import styled from 'styled-components';
 import { PackageJsonPage } from '../../pages-soup/package-json/package-json-page';
 import { VitePage } from '../../pages-soup/vite-page';
+import { MultiTerminalPage } from '../../pages-soup/MultiTerminalPage';
 
 import { Sidebar } from './Sidebar';
 import { useMainGuiStore } from '../../stores/main-gui-store';
@@ -22,6 +23,11 @@ export const MainUI: React.VFC<{}> = () => {
         <VitePage
           style={{
             display: selectedMenuOption === 'Vite' ? 'initial' : 'none'
+          }}
+        />
+        <MultiTerminalPage
+          style={{
+            display: selectedMenuOption === 'Terminals' ? 'initial' : 'none'
           }}
         />
         <PackageJsonPage

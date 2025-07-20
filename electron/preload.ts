@@ -19,9 +19,17 @@ const api = {
 
   //
 
-  sendKeystroke: (payload: any) => {
+  sendKeystroke: (terminalId: string, payload: any) => {
     //'terminal.keystroke',
-    ipcRenderer.send('terminal.keystroke', payload);
+    ipcRenderer.send('terminal.keystroke', { terminalId, payload });
+  },
+
+  createTerminal: (terminalId: string) => {
+    ipcRenderer.send('terminal.create', terminalId);
+  },
+
+  removeTerminal: (terminalId: string) => {
+    ipcRenderer.send('terminal.remove', terminalId);
   },
 
   saveFilePlease: (payload: any) => {
