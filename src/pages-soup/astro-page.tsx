@@ -1,36 +1,30 @@
 import React from 'react';
-import { useState } from 'react';
 import styled from 'styled-components';
-import { PageTypePicker } from '../components/PageTypePicker';
 import { PageTerminals } from '../components/PageTerminals';
 
-interface VitePageProps {
+interface AstroPageProps {
   style: any;
 }
 
-export const VitePage: React.FC<VitePageProps> = ({ style }) => {
-  const [selectedPageType, setSelectedPageType] = useState('');
-
+export const AstroPage: React.FC<AstroPageProps> = ({ style }) => {
   return (
     <Container style={style}>
       <ContentSection>
-        <Heading>Vite Page</Heading>
+        <Heading>Astro Page</Heading>
         <Description>
-          This is the Vite development page. Use the terminals below to run Vite commands.
+          This is the Astro development page. You can use the terminals below to run Astro commands.
         </Description>
 
         <FeatureList>
-          <FeatureItem>• Create new Vite projects</FeatureItem>
+          <FeatureItem>• Create new Astro projects</FeatureItem>
           <FeatureItem>• Run development server</FeatureItem>
           <FeatureItem>• Build for production</FeatureItem>
           <FeatureItem>• Install dependencies</FeatureItem>
         </FeatureList>
-
-        {/* <PageTypePicker setSelectedValue={setSelectedPageType} /> */}
       </ContentSection>
 
       <TerminalSection>
-        <PageTerminals pageType="Vite" style={{ height: '100%' }} />
+        <PageTerminals pageType="Astro" style={{ height: '100%' }} />
       </TerminalSection>
     </Container>
   );
@@ -40,7 +34,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #646cff;
+  background-color: #1a1a2e;
 `;
 
 const ContentSection = styled.div`
@@ -61,17 +55,17 @@ const Heading = styled.h1`
 `;
 
 const Description = styled.p`
-  color: #ffffff;
+  color: #cccccc;
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 24px;
 `;
 
 const FeatureList = styled.div`
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #16213e;
   padding: 20px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #333;
 `;
 
 const FeatureItem = styled.div`

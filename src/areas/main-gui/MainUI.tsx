@@ -4,7 +4,7 @@ import { useWindowSize } from '@react-hook/window-size';
 import styled from 'styled-components';
 import { PackageJsonPage } from '../../pages-soup/package-json/package-json-page';
 import { VitePage } from '../../pages-soup/vite-page';
-import { MultiTerminalPage } from '../../pages-soup/MultiTerminalPage';
+import { AstroPage } from '../../pages-soup/astro-page';
 
 import { Sidebar } from './Sidebar';
 import { useMainGuiStore } from '../../stores/main-gui-store';
@@ -19,15 +19,15 @@ export const MainUI: React.VFC<{}> = () => {
   return (
     <MainUiContainer style={{ height: height - 40 }}>
       <Sidebar sidebarWidth={defaultSidebardWidth} />
-      <GuiBody style={{ height: '100%', width: width - defaultSidebardWidth }}>
+      <PageContent style={{ width: width - defaultSidebardWidth }}>
         <VitePage
           style={{
             display: selectedMenuOption === 'Vite' ? 'initial' : 'none'
           }}
         />
-        <MultiTerminalPage
+        <AstroPage
           style={{
-            display: selectedMenuOption === 'Terminals' ? 'initial' : 'none'
+            display: selectedMenuOption === 'Astro' ? 'initial' : 'none'
           }}
         />
         <PackageJsonPage
@@ -40,19 +40,17 @@ export const MainUI: React.VFC<{}> = () => {
             display: selectedMenuOption === 'Home' ? 'initial' : 'none'
           }}
         />
-      </GuiBody>
+      </PageContent>
     </MainUiContainer>
   );
 };
 
 const MainUiContainer = styled.div`
   display: flex;
-  /* height: 30%; */
-  /* overflow: hidden; */
-  /* height: 100%; */
-  /* padding-top: 40px; */
+  height: 100%;
 `;
 
-const GuiBody = styled.div`
-  overflow-y: scroll;
+const PageContent = styled.div`
+  flex: 1;
+  overflow: hidden;
 `;

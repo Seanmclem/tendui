@@ -2,15 +2,27 @@ import React from 'react';
 import styled from 'styled-components';
 import { useMainGuiStore } from '../stores/main-gui-store';
 
-export const TerminalTabs: React.FC = () => {
-  const { terminalInstances, addTerminal, setActiveTerminal, removeTerminal } = useMainGuiStore();
+interface TerminalInstance {
+  id: string;
+  name: string;
+  isActive: boolean;
+}
+
+interface TerminalTabsProps {
+  terminalInstances: TerminalInstance[];
+  onAddTerminal: () => void;
+  onRemoveTerminal: (id: string) => void;
+}
+
+export const TerminalTabs: React.FC<TerminalTabsProps> = ({
+  terminalInstances,
+  onAddTerminal,
+  onRemoveTerminal
+}) => {
+  const { setActiveTerminal } = useMainGuiStore();
 
   const handleTabClick = (terminalId: string) => {
     setActiveTerminal(terminalId);
-  };
-
-  const handleAddTerminal = () => {
-    addTerminal();
   };
 
   return (
@@ -26,14 +38,14 @@ export const TerminalTabs: React.FC = () => {
             <TabCloseButton
               onClick={(e) => {
                 e.stopPropagation();
-                removeTerminal(terminal.id);
+                onRemoveTerminal(terminal.id);
               }}
             >
               ×
             </TabCloseButton>
           </TabItem>
         ))}
-        <AddTabButton onClick={handleAddTerminal}>+</AddTabButton>
+        <AddTabButton onClick={onAddTerminal}>+</AddTabButton>
       </TabsList>
     </TabsContainer>
   );

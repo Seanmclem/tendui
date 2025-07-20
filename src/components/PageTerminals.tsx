@@ -1,30 +1,41 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useMainGuiStore } from '../stores/main-gui-store';
-import { TerminalComponent } from '../components/Terminal';
-import { TerminalTabs } from '../components/TerminalTabs';
+import { TerminalComponent } from './Terminal';
+import { TerminalTabs } from './TerminalTabs';
 
-interface MultiTerminalPageProps {
-  style: any;
+interface PageTerminalsProps {
+  pageType: string;
+  style?: any;
 }
 
-export const MultiTerminalPage: React.FC<MultiTerminalPageProps> = ({ style }) => {
-  const { terminalInstances, addTerminal, removeTerminal } = useMainGuiStore();
+export const PageTerminals: React.FC<PageTerminalsProps> = ({ pageType, style }) => {
+  const { getTerminalsForPage, addTerminal, removeTerminal } = useMainGuiStore();
 
-  // Initialize with one terminal if none exist
+  const terminalInstances = getTerminalsForPage(pageType);
+
+  // Initialize with one terminal if none exist for this page
   useEffect(() => {
     if (terminalInstances.length === 0) {
-      addTerminal();
+      addTerminal(pageType);
     }
-  }, [terminalInstances.length, addTerminal]);
+  }, [terminalInstances.length, addTerminal, pageType]);
 
   const handleRemoveTerminal = (terminalId: string) => {
     removeTerminal(terminalId);
   };
 
+  const handleAddTerminal = () => {
+    addTerminal(pageType);
+  };
+
   return (
     <Container style={style}>
-      <TerminalTabs />
+      <TerminalTabs
+        terminalInstances={terminalInstances}
+        onAddTerminal={handleAddTerminal}
+        onRemoveTerminal={handleRemoveTerminal}
+      />
       <TerminalsContainer>
         {terminalInstances.map((terminal) => (
           <TerminalComponent
