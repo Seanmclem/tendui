@@ -22,22 +22,26 @@ export const MainUI: React.VFC<{}> = () => {
       <PageContent style={{ width: width - defaultSidebardWidth }}>
         <VitePage
           style={{
-            display: selectedMenuOption === 'Vite' ? 'initial' : 'none'
+            display: selectedMenuOption === 'Vite' ? 'flex' : 'none',
+            height: '100%'
           }}
         />
         <AstroPage
           style={{
-            display: selectedMenuOption === 'Astro' ? 'initial' : 'none'
+            display: selectedMenuOption === 'Astro' ? 'flex' : 'none',
+            height: '100%'
           }}
         />
         <PackageJsonPage
           style={{
-            display: selectedMenuOption === 'package.json' ? 'initial' : 'none'
+            display: selectedMenuOption === 'package.json' ? 'flex' : 'none',
+            height: '100%'
           }}
         />
         <HomePage
           style={{
-            display: selectedMenuOption === 'Home' ? 'initial' : 'none'
+            display: selectedMenuOption === 'Home' ? 'flex' : 'none',
+            height: '100%'
           }}
         />
       </PageContent>
@@ -48,9 +52,11 @@ export const MainUI: React.VFC<{}> = () => {
 const MainUiContainer = styled.div`
   display: flex;
   height: 100%;
+  background-color: #f0f0f0;
 `;
 
 const PageContent = styled.div`
   flex: 1;
-  overflow: hidden;
+  overflow: visible;
+  background-color: #e0e0e0;
 `;

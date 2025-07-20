@@ -1,12 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PageTerminals } from '../components/PageTerminals';
+import { useMainGuiStore } from '../stores/main-gui-store';
+import { runCommand } from '../utils/commander-utils';
 
 interface AstroPageProps {
   style: any;
 }
 
 export const AstroPage: React.FC<AstroPageProps> = ({ style }) => {
+  const { getActiveTerminal } = useMainGuiStore();
+
+  // Get the active terminal for this page
+  const activeTerminal = getActiveTerminal('Astro');
+
+  const handleRunCommand = (command: string) => {
+    if (activeTerminal) {
+      runCommand(activeTerminal.id, command, true);
+    } else {
+      console.log('No active terminal found for Astro page');
+    }
+  };
+
   return (
     <Container style={style}>
       <ContentSection>
@@ -21,6 +36,19 @@ export const AstroPage: React.FC<AstroPageProps> = ({ style }) => {
           <FeatureItem>• Build for production</FeatureItem>
           <FeatureItem>• Install dependencies</FeatureItem>
         </FeatureList>
+
+        {/* Example buttons showing how to use terminal ID */}
+        <ButtonContainer>
+          <button onClick={() => handleRunCommand('clear')}>Clear Terminal</button>
+          <button onClick={() => handleRunCommand('ls')}>List Files</button>
+          <button onClick={() => handleRunCommand('pwd')}>Show Current Directory</button>
+          <button onClick={() => handleRunCommand('echo "Hello from Astro page!"')}>
+            Echo Message
+          </button>
+        </ButtonContainer>
+
+        {/* Debug info - you can remove this */}
+        <DebugInfo>Active Terminal ID: {activeTerminal?.id || 'None'}</DebugInfo>
       </ContentSection>
 
       <TerminalSection>
@@ -66,6 +94,7 @@ const FeatureList = styled.div`
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #333;
+  margin-bottom: 20px;
 `;
 
 const FeatureItem = styled.div`
@@ -76,4 +105,35 @@ const FeatureItem = styled.div`
   &:last-child {
     margin-bottom: 0;
   }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+
+  button {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+`;
+
+const DebugInfo = styled.div`
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  margin-bottom: 20px;
 `;
